@@ -283,7 +283,7 @@ export function ControlPanel({ settings, updateSetting, onEditScript, onResetScr
             onChange={(value) => updateSetting('fontSize', value)}
             min={20}
             max={120}
-            label={`${settings.fontSize}px`}
+            label="Size"
             className="text-white"
           />
         </div>
@@ -293,7 +293,7 @@ export function ControlPanel({ settings, updateSetting, onEditScript, onResetScr
             onChange={(value) => updateSetting('margin', value)}
             min={0}
             max={20}
-            label={`${settings.margin}%`}
+            label="Margin"
             className="text-white"
           />
         </div>

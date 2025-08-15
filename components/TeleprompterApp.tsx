@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { ControlPanel } from "./ControlPanel";
 import { TeleprompterDisplay } from "./TeleprompterDisplay";
 import { ScriptEditor } from "./ScriptEditor";
@@ -36,12 +36,12 @@ Check out our Teleprompter App! Level up your speaking today and download the Te
     textAlign: 'center',
   });
 
-  const updateSetting = <K extends keyof TeleprompterSettings>(
+  const updateSetting = useCallback(<K extends keyof TeleprompterSettings>(
     key: K,
     value: TeleprompterSettings[K]
   ) => {
     setSettings(prev => ({ ...prev, [key]: value }));
-  };
+  }, []);
 
   const handleResetScript = () => {
     setResetTrigger(prev => prev + 1);
