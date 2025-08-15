@@ -116,7 +116,7 @@ Check out our Teleprompter App! Level up your speaking today and download the Te
 
   return (
     <div 
-      className="min-h-screen relative overflow-hidden"
+      className="min-h-screen relative overflow-hidden touch-manipulation"
       style={{ backgroundColor: settings.backgroundColor }}
     >
       <ControlPanel
@@ -126,7 +126,10 @@ Check out our Teleprompter App! Level up your speaking today and download the Te
         onResetScript={handleResetScript}
       />
       
-      <div onClick={() => updateSetting('isPlaying', !settings.isPlaying)}>
+      <div 
+        onClick={() => updateSetting('isPlaying', !settings.isPlaying)}
+        className="touch-manipulation"
+      >
         <TeleprompterDisplay
           script={script}
           settings={settings}

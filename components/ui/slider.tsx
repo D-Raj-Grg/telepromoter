@@ -1,48 +1,70 @@
-"use client";
+"use client"
 
-import { cn } from "@/lib/utils";
-import { forwardRef } from "react";
+import * as React from "react"
+import * as SliderPrimitive from "@radix-ui/react-slider"
+import { cn } from "@/lib/utils"
 
 export interface SliderProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
-  value: number;
-  onChange: (value: number) => void;
-  min?: number;
-  max?: number;
-  step?: number;
+  extends Omit<React.ComponentProps<typeof SliderPrimitive.Root>, 'value' | 'defaultValue' | 'onValueChange'> {
+  value?: number;
+  defaultValue?: number;
+  onChange?: (value: number) => void;
+  onValueChange?: (value: number[]) => void;
   label?: string;
 }
 
-const Slider = forwardRef<HTMLInputElement, SliderProps>(
-  ({ className, value, onChange, min = 0, max = 100, step = 1, label, ...props }, ref) => {
-    return (
-      <div className="flex items-center space-x-2">
-        {label && (
-          <label className="text-sm font-medium text-white whitespace-nowrap">
-            {label}: {value}
-          </label>
-        )}
-        <input
-          type="range"
-          min={min}
-          max={max}
-          step={step}
-          value={value}
-          onChange={(e) => onChange(Number(e.target.value))}
-          className={cn(
-            "flex-1 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer",
-            "slider-thumb:appearance-none slider-thumb:h-4 slider-thumb:w-4 slider-thumb:rounded-full slider-thumb:bg-blue-500 slider-thumb:cursor-pointer",
-            "[&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-blue-500 [&::-webkit-slider-thumb]:cursor-pointer",
-            "[&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-blue-500 [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:border-none",
-            className
-          )}
-          ref={ref}
-          {...props}
-        />
-      </div>
-    );
-  }
-);
-Slider.displayName = "Slider";
+function Slider({
+  className,
+  value,
+  defaultValue,
+  onChange,
+  onValueChange,
+  label,
+  min = 0,
+  max = 100,
+  ...props
+}: SliderProps) {
+  const handleValueChange = React.useCallback((newValue: number[]) => {
+    const singleValue = newValue[0];
+    onChange?.(singleValue);
+    onValueChange?.(newValue);
+  }, [onChange, onValueChange]);
 
-export { Slider };
+  const sliderValue = value !== undefined ? [value] : undefined;
+  const sliderDefaultValue = defaultValue !== undefined ? [defaultValue] : undefined;
+
+  return (
+    <div className="flex items-center gap-3 w-full">
+      {label && (
+        <label className="text-xs sm:text-sm font-medium text-white whitespace-nowrap min-w-fit">
+          {label}: {value || defaultValue || min}
+        </label>
+      )}
+      <SliderPrimitive.Root
+        value={sliderValue}
+        defaultValue={sliderDefaultValue}
+        onValueChange={handleValueChange}
+        min={min}
+        max={max}
+        className={cn(
+          "relative flex w-full touch-none items-center select-none",
+          className
+        )}
+        {...props}
+      >
+        <SliderPrimitive.Track
+          className="bg-gray-600/80 relative h-2 w-full grow overflow-hidden rounded-full"
+        >
+          <SliderPrimitive.Range
+            className="bg-blue-500 absolute h-full"
+          />
+        </SliderPrimitive.Track>
+        <SliderPrimitive.Thumb
+          className="border-white bg-blue-500 ring-blue-400/50 block h-5 w-5 rounded-full border-2 shadow-lg transition-colors hover:bg-blue-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+        />
+      </SliderPrimitive.Root>
+    </div>
+  )
+}
+
+export { Slider }

@@ -14,6 +14,7 @@ export function TeleprompterDisplay({ script, settings, resetTrigger }: Teleprom
   const textRef = useRef<HTMLDivElement>(null);
   const [scrollPosition, setScrollPosition] = useState(0);
   const [isRestarting, setIsRestarting] = useState(false);
+  const [showMobileHelp, setShowMobileHelp] = useState(false);
   const animationRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -42,10 +43,12 @@ export function TeleprompterDisplay({ script, settings, resetTrigger }: Teleprom
         if (newPosition > maxScroll) {
           // Show restart indicator briefly
           setIsRestarting(true);
+          setHasStartedPlaying(false); // Reset the playing state for auto-restart
           setTimeout(() => setIsRestarting(false), 500);
           
-          // Reset to start position where script begins to appear from bottom
-          return -(containerHeight * 0.5);
+          // Reset to center position where script is visible - same logic as initial positioning
+          const centerPosition = (containerHeight * 0.6) - (containerHeight * 0.4);
+          return centerPosition;
         }
         
         return newPosition;
@@ -70,12 +73,54 @@ export function TeleprompterDisplay({ script, settings, resetTrigger }: Teleprom
     }
   }, [resetTrigger]);
 
+  // Initialize scroll position to start script in center
+  useEffect(() => {
+    if (containerRef.current) {
+      const containerHeight = containerRef.current.clientHeight;
+      // Start with text visible in the center of the screen
+      // 60vh top spacing minus center positioning gives us proper center alignment
+      const centerPosition = (containerHeight * 0.6) - (containerHeight * 0.4);
+      setScrollPosition(centerPosition);
+    }
+  }, []);
+
+  // Re-center when font size changes (but only when not in the middle of playback)
+  const [hasStartedPlaying, setHasStartedPlaying] = useState(false);
+  
+  useEffect(() => {
+    if (settings.isPlaying) {
+      setHasStartedPlaying(true);
+    }
+  }, [settings.isPlaying]);
+
+  useEffect(() => {
+    // Only re-center if we haven't started playing yet, or if we explicitly want to reset
+    if (containerRef.current && !hasStartedPlaying) {
+      const containerHeight = containerRef.current.clientHeight;
+      const centerPosition = (containerHeight * 0.6) - (containerHeight * 0.4);
+      setScrollPosition(centerPosition);
+    }
+  }, [settings.fontSize, hasStartedPlaying]);
+
+  // Show mobile help on touch devices
+  useEffect(() => {
+    const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    if (isMobile) {
+      setShowMobileHelp(true);
+      const timer = setTimeout(() => setShowMobileHelp(false), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
   // Manual reset function
   const resetScript = () => {
     if (!containerRef.current) return;
     const containerHeight = containerRef.current.clientHeight;
-    setScrollPosition(-(containerHeight * 0.5));
+    // Reset to center position - same logic as initial positioning
+    const centerPosition = (containerHeight * 0.6) - (containerHeight * 0.4);
+    setScrollPosition(centerPosition);
     setIsRestarting(true);
+    setHasStartedPlaying(false); // Reset the playing state so position can be adjusted again
     setTimeout(() => setIsRestarting(false), 500);
   };
 
@@ -135,7 +180,7 @@ export function TeleprompterDisplay({ script, settings, resetTrigger }: Teleprom
   return (
     <div 
       ref={containerRef}
-      className="absolute inset-0 pt-16 overflow-hidden cursor-pointer select-none"
+      className="absolute inset-0 pt-20 lg:pt-16 overflow-hidden cursor-pointer select-none"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
       onClick={() => {
@@ -151,8 +196,8 @@ export function TeleprompterDisplay({ script, settings, resetTrigger }: Teleprom
           transform: `translateY(${-scrollPosition}px) ${settings.isFlipped ? 'scaleX(-1)' : ''}`,
         }}
       >
-        {/* Add some top spacing */}
-        <div style={{ height: '100vh' }} />
+        {/* Add some top spacing for initial positioning */}
+        <div style={{ height: '60vh' }} />
         {script}
         {/* Add some bottom spacing */}
         <div style={{ height: '100vh' }} />
@@ -161,8 +206,17 @@ export function TeleprompterDisplay({ script, settings, resetTrigger }: Teleprom
       {/* Restart indicator */}
       {isRestarting && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="bg-white/90 text-black px-6 py-3 rounded-lg text-lg font-medium animate-pulse">
+          <div className="bg-white/90 text-black px-4 py-2 sm:px-6 sm:py-3 rounded-lg text-base sm:text-lg font-medium animate-pulse">
             ↻ Restarting Script...
+          </div>
+        </div>
+      )}
+      
+      {/* Mobile help indicator - shows briefly on load */}
+      {showMobileHelp && (
+        <div className="absolute bottom-4 left-4 right-4 text-center z-10">
+          <div className="bg-black/80 text-white text-sm px-4 py-2 rounded-lg shadow-lg border border-white/20">
+            Tap to play/pause • Long press to restart • Swipe to scroll
           </div>
         </div>
       )}
