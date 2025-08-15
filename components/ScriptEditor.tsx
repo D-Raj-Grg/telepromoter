@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "./ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import { X, Save, Upload, Download } from "lucide-react";
 
 interface ScriptEditorProps {
@@ -55,36 +56,57 @@ export function ScriptEditor({ script, onScriptChange, onClose }: ScriptEditorPr
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b">
           <h2 className="text-xl font-semibold">Edit Script</h2>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={onClose}
-            className="text-gray-500 hover:text-gray-700"
-          >
-            <X size={20} />
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onClose}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <X size={20} />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Close editor</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
 
         {/* Toolbar */}
         <div className="flex items-center gap-2 p-4 border-b bg-gray-50">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleImport}
-            className="flex items-center gap-2"
-          >
-            <Upload size={16} />
-            Import
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleExport}
-            className="flex items-center gap-2"
-          >
-            <Download size={16} />
-            Export
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleImport}
+                className="flex items-center gap-2"
+              >
+                <Upload size={16} />
+                Import
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Import script from text file</p>
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleExport}
+                className="flex items-center gap-2"
+              >
+                <Download size={16} />
+                Export
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Export script to text file</p>
+            </TooltipContent>
+          </Tooltip>
           <div className="text-sm text-gray-600 ml-auto">
             {wordCount} words • ~{estimatedTime} min read
           </div>
@@ -103,13 +125,27 @@ export function ScriptEditor({ script, onScriptChange, onClose }: ScriptEditorPr
 
         {/* Footer */}
         <div className="flex items-center justify-end gap-2 p-4 border-t bg-gray-50">
-          <Button variant="outline" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button onClick={handleSave} className="flex items-center gap-2">
-            <Save size={16} />
-            Save Script
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="outline" onClick={onClose}>
+                Cancel
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Cancel editing and discard changes</p>
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button onClick={handleSave} className="flex items-center gap-2">
+                <Save size={16} />
+                Save Script
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Save script and close editor</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
       </div>
     </div>

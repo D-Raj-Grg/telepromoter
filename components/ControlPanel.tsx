@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { Slider } from "./ui/slider";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import type { TeleprompterSettings } from "./TeleprompterApp";
 
 interface ControlPanelProps {
@@ -48,64 +49,101 @@ export function ControlPanel({ settings, updateSetting, onEditScript, onResetScr
       <div className="flex items-center justify-between p-2 gap-2">
         {/* Left side controls */}
         <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => updateSetting('isPlaying', !settings.isPlaying)}
-            className="text-white hover:bg-white/20 h-8 w-8"
-          >
-            {settings.isPlaying ? <Pause size={20} /> : <Play size={20} />}
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => updateSetting('isPlaying', !settings.isPlaying)}
+                className="text-white hover:bg-white/20 h-8 w-8"
+              >
+                {settings.isPlaying ? <Pause size={20} /> : <Play size={20} />}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{settings.isPlaying ? 'Pause' : 'Play'}</p>
+            </TooltipContent>
+          </Tooltip>
 
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={onEditScript}
-            className="text-white hover:bg-white/20 h-8 w-8"
-            title="Edit script"
-          >
-            <Type size={20} />
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onEditScript}
+                className="text-white hover:bg-white/20 h-8 w-8"
+              >
+                <Type size={20} />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Edit script</p>
+            </TooltipContent>
+          </Tooltip>
 
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => updateSetting('isFlipped', !settings.isFlipped)}
-            className="text-white hover:bg-white/20 h-8 w-8"
-            title="Flip text horizontally"
-          >
-            <FlipHorizontal size={20} />
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => updateSetting('isFlipped', !settings.isFlipped)}
+                className="text-white hover:bg-white/20 h-8 w-8"
+              >
+                <FlipHorizontal size={20} />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Flip text horizontally</p>
+            </TooltipContent>
+          </Tooltip>
 
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={cycleTextAlign}
-            className="text-white hover:bg-white/20 h-8 w-8"
-            title={`Text alignment: ${settings.textAlign}`}
-          >
-            {getAlignIcon()}
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={cycleTextAlign}
+                className="text-white hover:bg-white/20 h-8 w-8"
+              >
+                {getAlignIcon()}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Text alignment: {settings.textAlign}</p>
+            </TooltipContent>
+          </Tooltip>
 
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => updateSetting('hasOutline', !settings.hasOutline)}
-            className="text-white hover:bg-white/20 h-8 w-8"
-            title="Toggle text outline"
-          >
-            <Square size={20} />
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => updateSetting('hasOutline', !settings.hasOutline)}
+                className="text-white hover:bg-white/20 h-8 w-8"
+              >
+                <Square size={20} />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Toggle text outline</p>
+            </TooltipContent>
+          </Tooltip>
 
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={onResetScript}
-            className="text-white hover:bg-white/20 h-8 w-8"
-            title="Reset script to beginning"
-          >
-            <RotateCcw size={20} />
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onResetScript}
+                className="text-white hover:bg-white/20 h-8 w-8"
+              >
+                <RotateCcw size={20} />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Reset script to beginning</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
 
         {/* Right side controls */}
