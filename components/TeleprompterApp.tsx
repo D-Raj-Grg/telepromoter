@@ -15,6 +15,7 @@ export interface TeleprompterSettings {
   isFlipped: boolean;
   hasOutline: boolean;
   textAlign: 'left' | 'center' | 'right';
+  textReveal: boolean;
 }
 
 export function TeleprompterApp() {
@@ -34,6 +35,7 @@ Check out our Teleprompter App! Level up your speaking today and download the Te
     isFlipped: false,
     hasOutline: false,
     textAlign: 'center',
+    textReveal: true,
   });
 
   const updateSetting = useCallback(<K extends keyof TeleprompterSettings>(

@@ -11,10 +11,15 @@ import {
   Palette,
   RotateCcw,
   Square,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { Slider } from "./ui/slider";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
+import { Switch } from "./ui/switch";
+import { Label } from "./ui/label";
+import { useState } from "react";
 import type { TeleprompterSettings } from "./TeleprompterApp";
 
 interface ControlPanelProps {
@@ -28,6 +33,8 @@ interface ControlPanelProps {
 }
 
 export function ControlPanel({ settings, updateSetting, onEditScript, onResetScript }: ControlPanelProps) {
+  const [showMobileControls, setShowMobileControls] = useState(false);
+
   const cycleTextAlign = () => {
     const alignments: Array<'left' | 'center' | 'right'> = ['left', 'center', 'right'];
     const currentIndex = alignments.indexOf(settings.textAlign);
@@ -37,26 +44,27 @@ export function ControlPanel({ settings, updateSetting, onEditScript, onResetScr
 
   const getAlignIcon = () => {
     switch (settings.textAlign) {
-      case 'left': return <AlignLeft size={20} />;
-      case 'center': return <AlignCenter size={20} />;
-      case 'right': return <AlignRight size={20} />;
-      default: return <AlignCenter size={20} />;
+      case 'left': return <AlignLeft size={16} />;
+      case 'center': return <AlignCenter size={16} />;
+      case 'right': return <AlignRight size={16} />;
+      default: return <AlignCenter size={16} />;
     }
   };
+
   return (
     <div className="fixed top-0 left-0 right-0 z-50 bg-slate-500/60 backdrop-blur-md border-b border-gray-700/50 shadow-2xl rounded-none border-x-0 border-t-0">
-      <div className="flex flex-col sm:flex-row items-center justify-between p-2 sm:p-3 gap-2 sm:gap-3">
-        {/* Mobile: Primary controls row */}
-        <div className="flex items-center justify-center gap-2 sm:gap-3 w-full sm:w-auto">
+      <div className="flex flex-col sm:flex-row items-center justify-between p-1.5 sm:p-3 gap-1.5 sm:gap-3">
+        {/* Primary controls - always visible */}
+        <div className="flex items-center justify-center gap-1.5 sm:gap-3 w-full sm:w-auto">
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => updateSetting('isPlaying', !settings.isPlaying)}
-                className="text-white hover:bg-white/20 h-11 w-11 sm:h-10 sm:w-10 border border-white/20 hover:border-white/40 transition-all duration-200 touch-none"
+                className="text-white hover:bg-white/20 h-9 w-9 sm:h-10 sm:w-10 border border-white/20 hover:border-white/40 transition-all duration-200 touch-none"
               >
-                {settings.isPlaying ? <Pause size={20} className="sm:w-6 sm:h-6" /> : <Play size={20} className="sm:w-6 sm:h-6" />}
+                {settings.isPlaying ? <Pause size={16} className="sm:w-5 sm:h-5" /> : <Play size={16} className="sm:w-5 sm:h-5" />}
               </Button>
             </TooltipTrigger>
             <TooltipContent>
@@ -70,9 +78,9 @@ export function ControlPanel({ settings, updateSetting, onEditScript, onResetScr
                 variant="ghost"
                 size="icon"
                 onClick={onEditScript}
-                className="text-white hover:bg-white/20 h-11 w-11 sm:h-10 sm:w-10 border border-white/20 hover:border-white/40 transition-all duration-200 touch-none"
+                className="text-white hover:bg-white/20 h-9 w-9 sm:h-10 sm:w-10 border border-white/20 hover:border-white/40 transition-all duration-200 touch-none"
               >
-                <Type size={20} className="sm:w-6 sm:h-6" />
+                <Type size={16} className="sm:w-5 sm:h-5" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>
@@ -86,9 +94,9 @@ export function ControlPanel({ settings, updateSetting, onEditScript, onResetScr
                 variant="ghost"
                 size="icon"
                 onClick={() => updateSetting('isFlipped', !settings.isFlipped)}
-                className="text-white hover:bg-white/20 h-11 w-11 sm:h-10 sm:w-10 border border-white/20 hover:border-white/40 transition-all duration-200 touch-none"
+                className="text-white hover:bg-white/20 h-9 w-9 sm:h-10 sm:w-10 border border-white/20 hover:border-white/40 transition-all duration-200 touch-none"
               >
-                <FlipHorizontal size={20} className="sm:w-6 sm:h-6" />
+                <FlipHorizontal size={16} className="sm:w-5 sm:h-5" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>
@@ -102,9 +110,9 @@ export function ControlPanel({ settings, updateSetting, onEditScript, onResetScr
                 variant="ghost"
                 size="icon"
                 onClick={cycleTextAlign}
-                className="text-white hover:bg-white/20 h-11 w-11 sm:h-10 sm:w-10 border border-white/20 hover:border-white/40 transition-all duration-200 touch-none"
+                className="text-white hover:bg-white/20 h-9 w-9 sm:h-10 sm:w-10 border border-white/20 hover:border-white/40 transition-all duration-200 touch-none"
               >
-                <span className="w-5 h-5 sm:w-6 sm:h-6">{getAlignIcon()}</span>
+                <span className="w-4 h-4 sm:w-5 sm:h-5">{getAlignIcon()}</span>
               </Button>
             </TooltipTrigger>
             <TooltipContent>
@@ -118,9 +126,9 @@ export function ControlPanel({ settings, updateSetting, onEditScript, onResetScr
                 variant="ghost"
                 size="icon"
                 onClick={() => updateSetting('hasOutline', !settings.hasOutline)}
-                className="text-white hover:bg-white/20 h-11 w-11 sm:h-10 sm:w-10 border border-white/20 hover:border-white/40 transition-all duration-200 touch-none"
+                className="text-white hover:bg-white/20 h-9 w-9 sm:h-10 sm:w-10 border border-white/20 hover:border-white/40 transition-all duration-200 touch-none"
               >
-                <Square size={20} className="sm:w-6 sm:h-6" />
+                <Square size={16} className="sm:w-5 sm:h-5" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>
@@ -134,19 +142,36 @@ export function ControlPanel({ settings, updateSetting, onEditScript, onResetScr
                 variant="ghost"
                 size="icon"
                 onClick={onResetScript}
-                className="text-white hover:bg-white/20 h-11 w-11 sm:h-10 sm:w-10 border border-white/20 hover:border-white/40 transition-all duration-200 touch-none"
+                className="text-white hover:bg-white/20 h-9 w-9 sm:h-10 sm:w-10 border border-white/20 hover:border-white/40 transition-all duration-200 touch-none"
               >
-                <RotateCcw size={20} className="sm:w-6 sm:h-6" />
+                <RotateCcw size={16} className="sm:w-5 sm:h-5" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>
               <p>Reset script to beginning</p>
             </TooltipContent>
           </Tooltip>
+
+          {/* Mobile toggle button - only visible on mobile */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setShowMobileControls(!showMobileControls)}
+                className="text-white hover:bg-white/20 h-9 w-9 sm:hidden border border-white/20 hover:border-white/40 transition-all duration-200 touch-none"
+              >
+                {showMobileControls ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{showMobileControls ? 'Hide controls' : 'Show controls'}</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
 
         {/* Desktop: Right side controls */}
-        <div className="hidden sm:flex items-center gap-3 lg:gap-6 flex-1 max-w-4xl">
+        <div className="hidden lg:flex items-center gap-3 lg:gap-6 flex-1 max-w-4xl">
           {/* Background Color */}
           <div className="flex items-center gap-2">
             <Palette size={16} className="text-white/80" />
@@ -154,7 +179,7 @@ export function ControlPanel({ settings, updateSetting, onEditScript, onResetScr
               type="color"
               value={settings.backgroundColor}
               onChange={(e) => updateSetting('backgroundColor', e.target.value)}
-              className="w-11 h-11 sm:w-10 sm:h-10 rounded-lg border border-white/20 cursor-pointer hover:border-white/40 transition-all duration-200 touch-none"
+              className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg border border-white/20 cursor-pointer hover:border-white/40 transition-all duration-200 touch-none"
               title="Background color"
             />
           </div>
@@ -166,13 +191,13 @@ export function ControlPanel({ settings, updateSetting, onEditScript, onResetScr
               type="color"
               value={settings.textColor}
               onChange={(e) => updateSetting('textColor', e.target.value)}
-              className="w-11 h-11 sm:w-10 sm:h-10 rounded-lg border border-white/20 cursor-pointer hover:border-white/40 transition-all duration-200 touch-none"
+              className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg border border-white/20 cursor-pointer hover:border-white/40 transition-all duration-200 touch-none"
               title="Text color"
             />
           </div>
 
           {/* Text Size Slider */}
-          <div className="hidden lg:flex items-center gap-2 min-w-[120px] xl:min-w-[140px]">
+          <div className="flex items-center gap-2 min-w-[120px] xl:min-w-[140px]">
             <Slider
               value={settings.fontSize}
               onChange={(value) => updateSetting('fontSize', value)}
@@ -206,13 +231,24 @@ export function ControlPanel({ settings, updateSetting, onEditScript, onResetScr
               className="text-white"
             />
           </div>
+          
+          {/* Text Reveal Toggle */}
+          <div className="flex items-center gap-2">
+            <Switch
+              checked={settings.textReveal}
+              onCheckedChange={(checked) => updateSetting('textReveal', checked)}
+              className="data-[state=checked]:bg-blue-500"
+            />
+            <Label className="text-xs text-white/80">Reveal</Label>
+          </div>
         </div>
       </div>
 
-      {/* Mobile controls row */}
-      <div className="sm:hidden flex flex-col gap-3 px-2 py-3 border-t border-gray-700/30">
+      {/* Mobile controls row - conditional display */}
+      {showMobileControls && (
+        <div className="sm:hidden flex flex-col gap-2 px-2 py-2 border-t border-gray-700/30">
         {/* Colors and Speed Row */}
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center justify-between gap-2">
           {/* Background Color */}
           <div className="flex items-center gap-2">
             <Palette size={16} className="text-white/80" />
@@ -220,7 +256,7 @@ export function ControlPanel({ settings, updateSetting, onEditScript, onResetScr
               type="color"
               value={settings.backgroundColor}
               onChange={(e) => updateSetting('backgroundColor', e.target.value)}
-              className="w-11 h-11 rounded-lg border border-white/20 cursor-pointer hover:border-white/40 transition-all duration-200 touch-none"
+              className="w-9 h-9 rounded-lg border border-white/20 cursor-pointer hover:border-white/40 transition-all duration-200 touch-none"
               title="Background color"
             />
           </div>
@@ -232,7 +268,7 @@ export function ControlPanel({ settings, updateSetting, onEditScript, onResetScr
               type="color"
               value={settings.textColor}
               onChange={(e) => updateSetting('textColor', e.target.value)}
-              className="w-11 h-11 rounded-lg border border-white/20 cursor-pointer hover:border-white/40 transition-all duration-200 touch-none"
+              className="w-9 h-9 rounded-lg border border-white/20 cursor-pointer hover:border-white/40 transition-all duration-200 touch-none"
               title="Text color"
             />
           </div>
@@ -251,7 +287,7 @@ export function ControlPanel({ settings, updateSetting, onEditScript, onResetScr
         </div>
         
         {/* Size and Margin Row */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
           <div className="flex items-center gap-2 flex-1">
             <Slider
               value={settings.fontSize}
@@ -273,10 +309,47 @@ export function ControlPanel({ settings, updateSetting, onEditScript, onResetScr
             />
           </div>
         </div>
-      </div>
+
+        {/* Advanced settings row */}
+        <div className="flex items-center justify-center gap-4">
+          <div className="flex items-center gap-2">
+            <Switch
+              checked={settings.textReveal}
+              onCheckedChange={(checked) => updateSetting('textReveal', checked)}
+              className="data-[state=checked]:bg-blue-500"
+            />
+            <Label className="text-xs text-white/80">Text Reveal</Label>
+          </div>
+        </div>
+        </div>
+      )}
       
       {/* Tablet controls row */}
-      <div className="hidden sm:flex lg:hidden items-center gap-4 px-3 py-2 border-t border-gray-700/30">
+      <div className="hidden sm:flex lg:hidden items-center gap-3 px-3 py-1.5 border-t border-gray-700/30">
+        {/* Colors */}
+        <div className="flex items-center gap-2">
+          <Palette size={14} className="text-white/80" />
+          <input
+            type="color"
+            value={settings.backgroundColor}
+            onChange={(e) => updateSetting('backgroundColor', e.target.value)}
+            className="w-8 h-8 rounded-lg border border-white/20 cursor-pointer hover:border-white/40 transition-all duration-200 touch-none"
+            title="Background color"
+          />
+        </div>
+        
+        <div className="flex items-center gap-2">
+          <Type size={14} className="text-white/80" />
+          <input
+            type="color"
+            value={settings.textColor}
+            onChange={(e) => updateSetting('textColor', e.target.value)}
+            className="w-8 h-8 rounded-lg border border-white/20 cursor-pointer hover:border-white/40 transition-all duration-200 touch-none"
+            title="Text color"
+          />
+        </div>
+
+        {/* Font Size */}
         <div className="flex items-center gap-2 flex-1">
           <Slider
             value={settings.fontSize}
@@ -287,7 +360,9 @@ export function ControlPanel({ settings, updateSetting, onEditScript, onResetScr
             className="text-white"
           />
         </div>
-        <div className="xl:hidden flex items-center gap-2 flex-1">
+        
+        {/* Margin - only show on larger tablets */}
+        <div className="hidden md:flex items-center gap-2 flex-1">
           <Slider
             value={settings.margin}
             onChange={(value) => updateSetting('margin', value)}
@@ -296,6 +371,16 @@ export function ControlPanel({ settings, updateSetting, onEditScript, onResetScr
             label="Margin"
             className="text-white"
           />
+        </div>
+
+        {/* Text Reveal Toggle */}
+        <div className="flex items-center gap-2">
+          <Switch
+            checked={settings.textReveal}
+            onCheckedChange={(checked) => updateSetting('textReveal', checked)}
+            className="data-[state=checked]:bg-blue-500"
+          />
+          <Label className="text-xs text-white/80">Reveal</Label>
         </div>
       </div>
     </div>

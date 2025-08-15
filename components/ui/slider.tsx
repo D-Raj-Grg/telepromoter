@@ -34,9 +34,9 @@ function Slider({
   const sliderDefaultValue = defaultValue !== undefined ? [defaultValue] : undefined;
 
   return (
-    <div className="flex items-center gap-3 w-full">
+    <div className="flex items-center gap-2 sm:gap-3 w-full">
       {label && (
-        <label className="text-xs sm:text-sm font-medium text-white whitespace-nowrap min-w-fit">
+        <label className="text-xs font-medium text-white whitespace-nowrap min-w-fit">
           {label}: {value || defaultValue || min}
         </label>
       )}
@@ -53,14 +53,14 @@ function Slider({
         {...props}
       >
         <SliderPrimitive.Track
-          className="bg-gray-600/80 relative h-2 w-full grow overflow-hidden rounded-full"
+          className="bg-gray-600/80 relative h-1.5 sm:h-2 w-full grow overflow-hidden rounded-full"
         >
           <SliderPrimitive.Range
             className="bg-blue-500 absolute h-full"
           />
         </SliderPrimitive.Track>
         <SliderPrimitive.Thumb
-          className="border-white bg-blue-500 ring-blue-400/50 block h-5 w-5 rounded-full border-2 shadow-lg transition-colors hover:bg-blue-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+          className="border-white bg-blue-500 ring-blue-400/50 block h-4 w-4 sm:h-5 sm:w-5 rounded-full border-2 shadow-lg transition-colors hover:bg-blue-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
         />
       </SliderPrimitive.Root>
     </div>

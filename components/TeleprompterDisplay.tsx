@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { TeleprompterSettings } from "./TeleprompterApp";
+import { TeleprompterTextReveal } from "./TeleprompterTextReveal";
 
 interface TeleprompterDisplayProps {
   script: string;
@@ -198,7 +199,19 @@ export function TeleprompterDisplay({ script, settings, resetTrigger }: Teleprom
       >
         {/* Add some top spacing for initial positioning */}
         <div style={{ height: '60vh' }} />
-        {script}
+        {settings.textReveal ? (
+          <TeleprompterTextReveal
+            scrollPosition={scrollPosition}
+            containerHeight={containerRef.current?.clientHeight || 0}
+            fontSize={settings.fontSize}
+            className="teleprompter-text"
+            style={textStyle}
+          >
+            {script}
+          </TeleprompterTextReveal>
+        ) : (
+          script
+        )}
         {/* Add some bottom spacing */}
         <div style={{ height: '100vh' }} />
       </div>
