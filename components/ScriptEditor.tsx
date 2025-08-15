@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
-import { Separator } from "./ui/separator";
 import { Badge } from "./ui/badge";
 import { Label } from "./ui/label";
 import { X, Save, Upload, Download, FileText, Clock, Eye } from "lucide-react";

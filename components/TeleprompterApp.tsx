@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { ControlPanel } from "./ControlPanel";
 import { TeleprompterDisplay } from "./TeleprompterDisplay";
 import { ScriptEditor } from "./ScriptEditor";

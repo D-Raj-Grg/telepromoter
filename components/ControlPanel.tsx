@@ -11,17 +11,10 @@ import {
   Palette,
   RotateCcw,
   Square,
-  Monitor,
-  Smartphone
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { Slider } from "./ui/slider";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
-import { Card } from "./ui/card";
-import { Separator } from "./ui/separator";
-import { Badge } from "./ui/badge";
-import { Label } from "./ui/label";
-import { Switch } from "./ui/switch";
 import type { TeleprompterSettings } from "./TeleprompterApp";
 
 interface ControlPanelProps {
