@@ -54,10 +54,10 @@ export function ScriptEditor({ script, onScriptChange, onClose }: ScriptEditorPr
   const estimatedTime = Math.ceil(wordCount / 150); // Assuming 150 words per minute
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-2 sm:p-4">
-      <Card className="w-full max-w-4xl h-full sm:max-h-[90vh] sm:h-auto flex flex-col shadow-2xl border-0">
+    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 overflow-hidden">
+      <Card className="w-full gap-3 max-w-4xl h-full max-h-[100vh] sm:max-h-[90vh] flex flex-col shadow-2xl border-0 overflow-hidden">
         {/* Header */}
-        <CardHeader className="p-3 sm:p-4">
+        <CardHeader className="px-3 py-0 sm:p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <FileText className="w-6 h-6 text-blue-500" />
@@ -138,43 +138,44 @@ export function ScriptEditor({ script, onScriptChange, onClose }: ScriptEditorPr
         </div>
 
         {/* Editor */}
-        <CardContent className="flex-1 p-3 sm:p-4">
-          <div className="relative">
-            <Label htmlFor="script-textarea" className="text-sm font-medium text-gray-700 mb-2 block">
+        <CardContent className="flex-1 p-3 sm:p-4 overflow-hidden flex flex-col min-h-0">
+          <div className="flex flex-col h-full min-h-0">
+            <Label htmlFor="script-textarea" className="text-sm font-medium text-gray-700 mb-2 block flex-shrink-0">
               Script Content
             </Label>
-            <textarea
-              id="script-textarea"
-              value={editedScript}
-              onChange={(e) => setEditedScript(e.target.value)}
-              className="w-full h-full resize-none border rounded-lg p-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base leading-relaxed touch-manipulation shadow-sm transition-all duration-200"
-              placeholder="Enter your script here...
+            <div className="relative flex-1 min-h-0">
+              <textarea
+                id="script-textarea"
+                value={editedScript}
+                onChange={(e) => setEditedScript(e.target.value)}
+                className="w-full h-full resize-none border rounded-lg p-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base leading-relaxed touch-manipulation shadow-sm transition-all duration-200"
+                placeholder="Enter your script here...
 
 Tip: Write clearly and use short sentences for better teleprompter readability."
-              style={{ minHeight: '300px' }}
-            />
-            <div className="absolute bottom-2 right-2 text-xs text-gray-400 bg-white/90 px-2 py-1 rounded">
-              {editedScript.length} characters
+              />
+              <div className="absolute bottom-2 right-2 text-xs text-gray-400 bg-white/90 px-2 py-1 rounded">
+                {editedScript.length} characters
+              </div>
             </div>
           </div>
         </CardContent>
 
         {/* Footer */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-3 sm:p-4 border-t bg-gray-50/50">
-          <div className="text-xs text-gray-500 flex items-center gap-2">
-            <Badge variant="outline" className="text-xs">
+        <div className="flex-shrink-0 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-3 sm:p-4 border-t bg-gray-50/50">
+          <div className="text-xs text-gray-500 flex items-center gap-2 min-w-0">
+            <Badge variant="outline" className="text-xs flex-shrink-0">
               Auto-saved
             </Badge>
-            <span>Changes will be applied when you save</span>
+            <span className="truncate hidden sm:inline">Changes will be applied when you save</span>
           </div>
           
-          <div className="flex flex-col sm:flex-row gap-2">
+          <div className="flex flex-col sm:flex-row gap-2 flex-shrink-0">
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button 
                   variant="outline" 
                   onClick={onClose}
-                  className="h-11 sm:h-10 touch-none order-2 sm:order-1"
+                  className="h-11 sm:h-10 touch-none order-2 sm:order-1 min-w-0"
                 >
                   Cancel
                 </Button>
@@ -187,7 +188,7 @@ Tip: Write clearly and use short sentences for better teleprompter readability."
               <TooltipTrigger asChild>
                 <Button 
                   onClick={handleSave} 
-                  className="flex items-center justify-center gap-2 h-11 sm:h-10 touch-none order-1 sm:order-2 bg-blue-600 hover:bg-blue-700"
+                  className="flex items-center justify-center gap-2 h-11 sm:h-10 touch-none order-1 sm:order-2 bg-blue-600 hover:bg-blue-700 min-w-0"
                 >
                   <Save size={16} />
                   Save Script
