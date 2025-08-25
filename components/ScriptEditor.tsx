@@ -54,8 +54,9 @@ export function ScriptEditor({ script, onScriptChange, onClose }: ScriptEditorPr
   const estimatedTime = Math.ceil(wordCount / 150); // Assuming 150 words per minute
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 overflow-hidden">
-      <Card className="w-full gap-3 max-w-4xl h-full max-h-[100vh] sm:max-h-[90vh] flex flex-col shadow-2xl border-0 overflow-hidden">
+    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-start justify-center overflow-hidden" style={{ WebkitOverflowScrolling: 'touch' }}>
+      <div className="w-full h-full p-2 sm:p-4 overflow-y-auto overscroll-none" style={{ WebkitOverflowScrolling: 'touch' }}>
+        <Card className="w-full max-w-4xl min-h-full sm:min-h-0 sm:max-h-[90vh] mx-auto flex flex-col shadow-2xl border-0">
         {/* Header */}
         <CardHeader className="px-3 py-0 sm:p-4">
           <div className="flex items-center justify-between">
@@ -138,24 +139,28 @@ export function ScriptEditor({ script, onScriptChange, onClose }: ScriptEditorPr
         </div>
 
         {/* Editor */}
-        <CardContent className="flex-1 p-3 sm:p-4 overflow-hidden flex flex-col min-h-0">
-          <div className="flex flex-col h-full min-h-0">
-            <Label htmlFor="script-textarea" className="text-sm font-medium text-gray-700 mb-2 block flex-shrink-0">
-              Script Content
-            </Label>
-            <div className="relative flex-1 min-h-0">
-              <textarea
-                id="script-textarea"
-                value={editedScript}
-                onChange={(e) => setEditedScript(e.target.value)}
-                className="w-full h-full resize-none border rounded-lg p-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base leading-relaxed touch-manipulation shadow-sm transition-all duration-200"
-                placeholder="Enter your script here...
+        <CardContent className="flex-1 p-3 sm:p-4 flex flex-col">
+          <Label htmlFor="script-textarea" className="text-sm font-medium text-gray-700 mb-2 block flex-shrink-0">
+            Script Content
+          </Label>
+          <div className="relative flex-1">
+            <textarea
+              id="script-textarea"
+              value={editedScript}
+              onChange={(e) => setEditedScript(e.target.value)}
+              className="w-full resize-none border rounded-lg p-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base leading-relaxed shadow-sm transition-colors duration-200 overflow-y-auto"
+              style={{ 
+                height: '50vh',
+                minHeight: '300px',
+                WebkitOverflowScrolling: 'touch',
+                overscrollBehavior: 'contain'
+              }}
+              placeholder="Enter your script here...
 
 Tip: Write clearly and use short sentences for better teleprompter readability."
-              />
-              <div className="absolute bottom-2 right-2 text-xs text-gray-400 bg-white/90 px-2 py-1 rounded">
-                {editedScript.length} characters
-              </div>
+            />
+            <div className="absolute bottom-2 right-2 text-xs text-gray-400 bg-white/90 px-2 py-1 rounded pointer-events-none">
+              {editedScript.length} characters
             </div>
           </div>
         </CardContent>
@@ -200,7 +205,8 @@ Tip: Write clearly and use short sentences for better teleprompter readability."
             </Tooltip>
           </div>
         </div>
-      </Card>
+        </Card>
+      </div>
     </div>
   );
 }
